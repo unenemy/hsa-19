@@ -48,3 +48,29 @@ data.each do |operation, values|
 end
 
 g.write('performance_comparison.png')
+
+
+data = {
+  "memory" => {
+    10000 => 720000,
+    20000 => 1440000,
+    30000 => 2160000,
+    40000 => 2880000,
+    50000 => 3600000,
+    60000 => 4320000,
+    70000 => 5040000,
+    80000 => 5759568,
+    90000 => 6479568,
+    100000 => 7199568
+  }
+}
+
+g = Gruff::Line.new
+g.title = 'Memory Profile'
+g.labels = data["memory"].keys.each_with_index.map { |k, i| [i, k.to_s] }.to_h
+
+data.each do |operation, values|
+  g.data(operation.capitalize, values.values)
+end
+
+g.write('memory_profile.png')

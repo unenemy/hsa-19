@@ -1,6 +1,7 @@
 require "./tree.rb"
 require "benchmark"
 require "json"
+require 'memory_profiler'
 
 buckets = {}
 
@@ -8,11 +9,14 @@ buckets = {}
   buckets[size] = 10.times.map do 
     values = []
     tree = AVLTree.new
-    size.times do |i|
-      value = rand(1_000_000_000)
-      tree.add(value)
-      values << value
+    report = MemoryProfiler.report do
+      size.times do |i|
+        value = rand(1_000_000_000)
+        tree.add(value)
+        values << value
+      end
     end
+    report.pretty_print(detailed_report: false)
     {
       tree: tree,
       samples: values.sample(1000)
